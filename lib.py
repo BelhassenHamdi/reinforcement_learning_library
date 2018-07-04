@@ -15,6 +15,16 @@ epsilon1 = 0.05 # I named it epsilon 1 cause epsilon is a token in python
 action_value_state = {'a':1000, 'b':3000, 'c': 100, 'f': 321}
 reward = {}
 
+def actionValueOptimisticInitializer(action_value_dict, initial_value = 3):
+    for key in action_value_dict:
+        action_value_dict[key]=initial_value
+    return action_value_dict
+
+def actionValueZeroInitializer(action_value_dict):
+    for key in action_value_dict:
+        action_value_dict[key]=0
+    return action_value_dict
+
 def greedy(action_value_dict):
     return max(action_value_dict.items(), key=operator.itemgetter(1))[0]
 
@@ -41,4 +51,6 @@ def ActionValueNonStationnaryUpdateComputation(action_value_dict, action, alfa, 
 
 print(greedy(action_value_state))
 print(epsilonGreedy(action_value_state, epsilon1))
-print(ActionValueUpdateComputation(action_value_state, 'c', 123, 3))
+print(ActionValueStationnaryUpdateComputation(action_value_state, 'c', 123, 3))
+print(actionValueOptimisticInitializer(action_value_state))
+print(actionValueZeroInitializer(action_value_state))
