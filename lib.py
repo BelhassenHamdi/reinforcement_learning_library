@@ -28,9 +28,14 @@ def epsilonGreedy(action_value_dict, epsy):
         exploration_action_space.remove(expoitation_action)
         return np.random.choice(exploration_action_space)
 
-def ActionValueUpdateComputation(action_value_dict, action, iteration, reward):
+def ActionValueStationnaryUpdateComputation(action_value_dict, action, iteration, reward):
     old =action_value_dict[action]
     new_action_value = old + (1/iteration)*(reward-old)
+    return new_action_value
+
+def ActionValueNonStationnaryUpdateComputation(action_value_dict, action, alfa, reward):
+    old =action_value_dict[action]
+    new_action_value = old + (1/alfa)*(reward-old)
     return new_action_value
 
 
