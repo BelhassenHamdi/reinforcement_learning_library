@@ -5,6 +5,7 @@ methods and related functions.
 
 import operator
 import numpy as np
+import math
 
 
 #  test set for functions evaluation those function way or not undergo some modification
@@ -13,7 +14,14 @@ import numpy as np
 num_iteration = 152
 epsilon1 = 0.05 # I named it epsilon 1 cause epsilon is a token in python
 action_value_state = {'a':1000, 'b':3000, 'c': 100, 'f': 321}
+action_value_iteration = {'a':11, 'b':23, 'c': 6, 'f': 41}
 reward = {}
+
+def UpperConfidenceBoundActionSelection(action_value_state, action_value_iteration, iteration, c=1):
+    actionValueFunction = {}
+    for action in action_value_state:
+        actionValueFunction[action] = action_value_state[action] + c*math.sqrt(math.log2(iteration)/action_value_iteration[action])
+    return max(actionValueFunction.items(), key=operator.itemgetter(1))[0]
 
 def actionValueOptimisticInitializer(action_value_dict, initial_value = 3):
     for key in action_value_dict:
@@ -54,3 +62,4 @@ print(epsilonGreedy(action_value_state, epsilon1))
 print(ActionValueStationnaryUpdateComputation(action_value_state, 'c', 123, 3))
 print(actionValueOptimisticInitializer(action_value_state))
 print(actionValueZeroInitializer(action_value_state))
+print(UpperConfidenceBoundActionSelection(action_value_state, action_value_iteration, 2, 4))
