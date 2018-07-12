@@ -15,6 +15,7 @@ num_iteration = 152
 epsilon1 = 0.05 # I named it epsilon 1 cause epsilon is a token in python
 action_value_state = {'a':1000, 'b':3000, 'c': 100, 'f': 321}
 action_value_iteration = {'a':11, 'b':23, 'c': 6, 'f': 41}
+ActionPreferences = {'a': 0, 'b': 0, 'c': 0, 'f': 0}
 reward = {}
 
 def UpperConfidenceBoundActionSelection(action_value_state, action_value_iteration, iteration, c=1):
@@ -56,6 +57,14 @@ def ActionValueNonStationnaryUpdateComputation(action_value_dict, action, alfa, 
     new_action_value = old + (1/alfa)*(reward-old)
     return new_action_value
 
+def SoftMaxDistribution(ActionPreferences):
+    expActionPref = {}
+    expActionPref = {key : math.exp(value) for key, value in ActionPreferences.items()}
+    listSum = sum(expActionPref.values())
+    SoftMaxDistributionList = {key : value/listSum for key, value in expActionPref.items()}
+    return SoftMaxDistributionList
+
+# def GradientBanditAlgorithm():
 
 print(greedy(action_value_state))
 print(epsilonGreedy(action_value_state, epsilon1))
@@ -63,3 +72,4 @@ print(ActionValueStationnaryUpdateComputation(action_value_state, 'c', 123, 3))
 print(actionValueOptimisticInitializer(action_value_state))
 print(actionValueZeroInitializer(action_value_state))
 print(UpperConfidenceBoundActionSelection(action_value_state, action_value_iteration, 2, 4))
+print(SoftMaxDistribution(ActionPreferences))
