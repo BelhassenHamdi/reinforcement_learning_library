@@ -17,6 +17,9 @@ action_value_state = {'a':1000, 'b':3000, 'c': 100, 'f': 321}
 action_value_iteration = {'a':11, 'b':23, 'c': 6, 'f': 41}
 ActionPreferences = {'a': 0, 'b': 0, 'c': 0, 'f': 0}
 reward = {}
+receivedReward = 3
+alpha = 2
+AvReward = 2.3
 
 def UpperConfidenceBoundActionSelection(action_value_state, action_value_iteration, iteration, c=1):
     actionValueFunction = {}
@@ -64,6 +67,14 @@ def SoftMaxDistribution(ActionPreferences):
     SoftMaxDistributionList = {key : value/listSum for key, value in expActionPref.items()}
     return SoftMaxDistributionList
 
+def ActionPreferencesUpdate(ActionPreferences, alpha, receivedReward, AvReward):
+    policyValues = SoftMaxDistribution(ActionPreferences)
+    action = max(policyValues.items(), key=operator.itemgetter(1))[0]
+    NewActionPreferences = policyValues
+    NewActionPreferences = {key : value + alpha * (receivedReward - AvReward) * policyValues[action] for key, value in ActionPreferences.items() if key not in action}
+    NewActionPreferences[action] =  ActionPreferences[action] + alpha * (receivedReward - AvReward) * (1 - policyValues[action])
+    return NewActionPreferences
+
 # def GradientBanditAlgorithm():
 
 print(greedy(action_value_state))
@@ -73,3 +84,4 @@ print(actionValueOptimisticInitializer(action_value_state))
 print(actionValueZeroInitializer(action_value_state))
 print(UpperConfidenceBoundActionSelection(action_value_state, action_value_iteration, 2, 4))
 print(SoftMaxDistribution(ActionPreferences))
+print(ActionPreferencesUpdate(ActionPreferences, alpha, receivedReward, AvReward))
